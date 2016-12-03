@@ -22,6 +22,9 @@
     ViewController * viewController = [[ViewController alloc] init];
     self.window.rootViewController = viewController;
     [self.window makeKeyAndVisible];
+    
+    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
+    [SVProgressHUD setMinimumDismissTimeInterval:1.5];
     return YES;
 }
 

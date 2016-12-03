@@ -293,7 +293,7 @@ typedef NS_ENUM(int, Operation) {
 - (void)getIllegalWithString:(NSString *)str {
     NSArray *strs = [str componentsSeparatedByString:@"|"];
     if (strs.count == 2 && [strs[1] isEqualToString:_currentGamer.user.userId]) {
-
+        [SVProgressHUD showErrorWithStatus:@"你的牌太小了！"];
     }
 }
 

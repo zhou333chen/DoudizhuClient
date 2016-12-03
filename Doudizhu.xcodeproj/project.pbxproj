@@ -36,6 +36,11 @@
 		5762DFF91DEE7A1800D5860F /* GameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5762DFF81DEE7A1800D5860F /* GameView.m */; };
 		5762E0421DF0336900D5860F /* Cards.m in Sources */ = {isa = PBXBuildFile; fileRef = 5762E0411DF0336900D5860F /* Cards.m */; };
 		5762E0451DF0339800D5860F /* GamerChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5762E0441DF0339800D5860F /* GamerChecker.m */; };
+		5762E0511DF2C6C300D5860F /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5762E0481DF2C6C300D5860F /* SVIndefiniteAnimatedView.m */; };
+		5762E0521DF2C6C300D5860F /* SVProgressAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5762E04A1DF2C6C300D5860F /* SVProgressAnimatedView.m */; };
+		5762E0531DF2C6C300D5860F /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5762E04C1DF2C6C300D5860F /* SVProgressHUD.bundle */; };
+		5762E0541DF2C6C300D5860F /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5762E04E1DF2C6C300D5860F /* SVProgressHUD.m */; };
+		5762E0551DF2C6C300D5860F /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5762E0501DF2C6C300D5860F /* SVRadialGradientLayer.m */; };
 		57B280D61DED592000E8CAE7 /* UIImage+ResizeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B280D51DED592000E8CAE7 /* UIImage+ResizeHelper.m */; };
 		57B280E81DEDC32F00E8CAE7 /* BottomCardsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B280E71DEDC32F00E8CAE7 /* BottomCardsView.m */; };
 /* End PBXBuildFile section */
@@ -98,6 +103,16 @@
 		5762E0411DF0336900D5860F /* Cards.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cards.m; sourceTree = "<group>"; };
 		5762E0431DF0339800D5860F /* GamerChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GamerChecker.h; sourceTree = "<group>"; };
 		5762E0441DF0339800D5860F /* GamerChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GamerChecker.m; sourceTree = "<group>"; };
+		5762E0471DF2C6C300D5860F /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
+		5762E0481DF2C6C300D5860F /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
+		5762E0491DF2C6C300D5860F /* SVProgressAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressAnimatedView.h; sourceTree = "<group>"; };
+		5762E04A1DF2C6C300D5860F /* SVProgressAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressAnimatedView.m; sourceTree = "<group>"; };
+		5762E04B1DF2C6C300D5860F /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		5762E04C1DF2C6C300D5860F /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		5762E04D1DF2C6C300D5860F /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		5762E04E1DF2C6C300D5860F /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		5762E04F1DF2C6C300D5860F /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
+		5762E0501DF2C6C300D5860F /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
 		57B280D41DED592000E8CAE7 /* UIImage+ResizeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ResizeHelper.h"; sourceTree = "<group>"; };
 		57B280D51DED592000E8CAE7 /* UIImage+ResizeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ResizeHelper.m"; sourceTree = "<group>"; };
 		57B280E61DEDC32F00E8CAE7 /* BottomCardsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BottomCardsView.h; sourceTree = "<group>"; };
@@ -135,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				574A62B41DEC56690014EBAB /* Socket */,
+				5762E0461DF2C6C300D5860F /* SVProgressHUD */,
 				574A62A91DEBC9B00014EBAB /* Category */,
 				574A62A21DEBC42A0014EBAB /* Model */,
 				574A62A11DEBC4090014EBAB /* View */,
@@ -278,6 +294,23 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		5762E0461DF2C6C300D5860F /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				5762E0471DF2C6C300D5860F /* SVIndefiniteAnimatedView.h */,
+				5762E0481DF2C6C300D5860F /* SVIndefiniteAnimatedView.m */,
+				5762E0491DF2C6C300D5860F /* SVProgressAnimatedView.h */,
+				5762E04A1DF2C6C300D5860F /* SVProgressAnimatedView.m */,
+				5762E04B1DF2C6C300D5860F /* SVProgressHUD-Prefix.pch */,
+				5762E04C1DF2C6C300D5860F /* SVProgressHUD.bundle */,
+				5762E04D1DF2C6C300D5860F /* SVProgressHUD.h */,
+				5762E04E1DF2C6C300D5860F /* SVProgressHUD.m */,
+				5762E04F1DF2C6C300D5860F /* SVRadialGradientLayer.h */,
+				5762E0501DF2C6C300D5860F /* SVRadialGradientLayer.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -338,6 +371,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				574A62D91DEC69B60014EBAB /* Info.plist in Resources */,
+				5762E0531DF2C6C300D5860F /* SVProgressHUD.bundle in Resources */,
 				574A629A1DEBC2D10014EBAB /* LaunchScreen.storyboard in Resources */,
 				574A62D61DEC69B60014EBAB /* Documentation.html in Resources */,
 				574A62971DEBC2D10014EBAB /* Assets.xcassets in Resources */,
@@ -355,11 +389,13 @@
 				574A62DF1DEC69B60014EBAB /* DDContextFilterLogFormatter.m in Sources */,
 				574A62DD1DEC69B60014EBAB /* DDLog.m in Sources */,
 				574A62DE1DEC69B60014EBAB /* DDTTYLogger.m in Sources */,
+				5762E0521DF2C6C300D5860F /* SVProgressAnimatedView.m in Sources */,
 				574A62AC1DEBC9D00014EBAB /* UIView+FrameHelper.m in Sources */,
 				574A62E11DEC69B60014EBAB /* DDMultiFormatter.m in Sources */,
 				574A62D81DEC69B60014EBAB /* GCDAsyncUdpSocket.m in Sources */,
 				574A62DA1DEC69B60014EBAB /* DDAbstractDatabaseLogger.m in Sources */,
 				574A62DC1DEC69B60014EBAB /* DDFileLogger.m in Sources */,
+				5762E0541DF2C6C300D5860F /* SVProgressHUD.m in Sources */,
 				574A62B71DEC567D0014EBAB /* SocketManager.m in Sources */,
 				574A62921DEBC2D10014EBAB /* ViewController.m in Sources */,
 				574A628F1DEBC2D10014EBAB /* AppDelegate.m in Sources */,
@@ -369,9 +405,11 @@
 				574A62E01DEC69B60014EBAB /* DDDispatchQueueLogFormatter.m in Sources */,
 				57B280E81DEDC32F00E8CAE7 /* BottomCardsView.m in Sources */,
 				574A62AF1DEBC9ED0014EBAB /* UIColor+RGBHelper.m in Sources */,
+				5762E0551DF2C6C300D5860F /* SVRadialGradientLayer.m in Sources */,
 				574A62D71DEC69B60014EBAB /* GCDAsyncSocket.m in Sources */,
 				574A628C1DEBC2D10014EBAB /* main.m in Sources */,
 				5762DFF91DEE7A1800D5860F /* GameView.m in Sources */,
+				5762E0511DF2C6C300D5860F /* SVIndefiniteAnimatedView.m in Sources */,
 				5762E0451DF0339800D5860F /* GamerChecker.m in Sources */,
 				574A62DB1DEC69B60014EBAB /* DDASLLogger.m in Sources */,
 				574A62B31DEBCBA10014EBAB /* CardsView.m in Sources */,

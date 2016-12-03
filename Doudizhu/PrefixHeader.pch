@@ -15,6 +15,7 @@
 #import "UIView+FrameHelper.h"
 #import "UIColor+RGBHelper.h"
 #import "UIImage+ResizeHelper.h"
+#import "SVProgressHUD.h"
 
 #define SCREEN_FRAME ([UIScreen mainScreen].applicationFrame)
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)

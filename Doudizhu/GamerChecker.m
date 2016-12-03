@@ -56,6 +56,7 @@
     } else {
         cards.type = TypeIllegal;
         NSLog(@"牌型不合法");
+        [SVProgressHUD showErrorWithStatus:@"这牌型不对吧！"];
         return NO;
     }
 }
