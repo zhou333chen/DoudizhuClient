@@ -114,59 +114,44 @@
 + (BOOL)checkPlane:(Cards *)cards {
     if (cards.count >= 6) {
         int planeCount = 0;
-        int flag = 0;   // 1代表相同的牌在前面，2代表相同的牌在后面
-        for (int i=0; i<=cards.count-3; i=i+3) {
-
+        int firstIndex = -1;
+        for (int i = 0; i<cards.count - planeCount * 2; i++) {
             if ([cards.cardList[i] number] == [cards.cardList[i+1] number] &&
                 [cards.cardList[i] number] == [cards.cardList[i+2] number]) {
-                planeCount++;
-                flag = 1;
-            } else {
-                break;
-            }
-        }
-        if (planeCount == 0) {
-            for (int i=cards.count-1; i>=2; i=i-3) {
-                if ([cards.cardList[i] number] == [cards.cardList[i-1] number] &&
-                    [cards.cardList[i] number] == [cards.cardList[i-2] number]) {
-                    planeCount++;
-                    flag = 2;
-                } else {
-                    break;
+                if (firstIndex == -1) {
+                    firstIndex = i;
                 }
-
+                i += 2;
+                planeCount++;
+            } else if (firstIndex != -1){
+                return false;
             }
         }
         // 判断飞机带的牌是否符合要求
         if (planeCount > 0) {
-            int index;
-            if (flag == 1) {
-                index = planeCount * 3;
-            } else {
-                index = 0;
-            }
             if (cards.count == planeCount * 3) {
                 // 不带牌
                 cards.type = TypePlane;
                 return YES;
             } else if (cards.count == planeCount * 4) {
                 // 三带一
+                [self adjustCards:cards toFrontfromIndex:firstIndex toIndex:firstIndex + planeCount * 3];
                 cards.type = TypePlane;
-                if (flag == 2) {
-                    [self adjustOrder:cards atIndex:planeCount];
-                }
                 return YES;
             } else if (cards.count == planeCount * 5){
                 // 三带二
-                for (; index<planeCount*2; index=index+2) {
-                    if ([cards.cardList[index] number] != [cards.cardList[index+1] number]) {
+                for (int i=0; i<firstIndex; i= i + 2) {
+                    if ([cards.cardList[i] number] != [cards.cardList[i+1] number]) {
                         return NO;
                     }
                 }
-                cards.type = TypePlane;
-                if (flag == 2) {
-                    [self adjustOrder:cards atIndex:planeCount * 2];
+                for (int i=firstIndex + planeCount * 3; i<cards.count; i=i + 2) {
+                    if ([cards.cardList[i] number] != [cards.cardList[i+1] number]) {
+                        return NO;
+                    }
                 }
+                [self adjustCards:cards toFrontfromIndex:firstIndex toIndex:firstIndex + planeCount * 3];
+                cards.type = TypePlane;
                 return YES;
             }
         }
@@ -176,40 +161,35 @@
 
 + (BOOL)checkFour:(Cards *)cards {
     if (cards.count == 6 || cards.count == 8) {
-        int flag = 0;   // 1代表四张在前面，2代表四张在后面
-        [cards.cardList[0] number];
-        if ([cards.cardList[0] number] == [cards.cardList[1] number] &&
-            [cards.cardList[0] number] == [cards.cardList[2] number] &&
-            [cards.cardList[0] number] == [cards.cardList[3] number]) {
-            flag = 1;
-        } else if ([cards.cardList[cards.count-1] number] == [cards.cardList[cards.count-2] number] &&
-                   [cards.cardList[cards.count-1] number] == [cards.cardList[cards.count-3] number] &&
-                   [cards.cardList[cards.count-1] number] == [cards.cardList[cards.count-4] number]) {
-            flag = 2;
-        } else {
-            return NO;
+        int firstIndex = -1;
+        for (int i = 0; i<=cards.count - 4; i++) {
+            if ([cards.cardList[i] number] == [cards.cardList[i+1] number] &&
+                [cards.cardList[i] number] == [cards.cardList[i+2] number] &&
+                [cards.cardList[i] number] == [cards.cardList[i+3] number]) {
+                firstIndex = i;
+                break;
+            }
         }
-        int index;
-        if (flag == 1) {
-            index = 4;
-        } else {
-            index = 0;
+        if (firstIndex == -1) {
+            return false;
         }
         if (cards.count == 6) {
+            [self adjustCards:cards toFrontfromIndex:firstIndex toIndex:firstIndex + 4];
             cards.type = TypeFour;
-            if (flag == 2) {
-                [self adjustOrder:cards atIndex:2];
-            }
             return YES;
         } else if (cards.count == 8) {
-            if ([cards.cardList[index] number] == [cards.cardList[index+1] number] &&
-                [cards.cardList[index+2] number] == [cards.cardList[index+3] number]) {
-                cards.type = TypeFour;
-                if (flag == 2) {
-                    [self adjustOrder:cards atIndex:4];
+            for (int i=0; i<firstIndex; i=i + 2) {
+                if ([cards.cardList[i] number] != [cards.cardList[i+1] number]) {
+                    return NO;
                 }
-                return YES;
             }
+            for (int i=firstIndex + 4; i<cards.count; i=i + 2) {
+                if ([cards.cardList[i] number] != [cards.cardList[i+1] number]) {
+                    return NO;
+                }
+            }
+            [self adjustCards:cards toFrontfromIndex:firstIndex toIndex:firstIndex + 4];
+            return YES;
         }
     }
     return NO;
@@ -239,14 +219,14 @@
         } else if (cards.count == 4){
             cards.type = TypeThree;
             if (flag == 2) {
-                [self adjustOrder:cards atIndex:1];
+                [self adjustCards:cards toFrontfromIndex:1 toIndex:4];
             }
             return YES;
         } else {
             if ([cards.cardList[index] number] == [cards.cardList[index+1] number]) {
                 cards.type = TypeThree;
                 if (flag == 2) {
-                    [self adjustOrder:cards atIndex:2];
+                    [self adjustCards:cards toFrontfromIndex:2 toIndex:5];
                 }
                 return YES;
             } else {
@@ -278,14 +258,19 @@
 }
 
 // AB->BA
-+ (void)adjustOrder:(Cards *)cards atIndex:(int)index {
-    if (index > cards.count - 1) {
++ (void)adjustCards:(Cards *)cards toFrontfromIndex:(int)from toIndex:(int)to{
+    if (from == 0) {
         return;
     }
-    for (int i=0; i<index; i++) {
-        Card *card = [cards.cardList objectAtIndex:0];
+    
+    if (from > cards.count - 1 || to > cards.count - 1) {
+        return;
+    }
+    
+    for (int i=from; i<to; i++) {
+        Card *card = [cards.cardList objectAtIndex:i];
         [cards.cardList removeObject:card];
-        [cards.cardList addObject:card];
+        [cards.cardList insertObject:card atIndex:0];
     }
 }
 

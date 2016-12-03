@@ -85,15 +85,14 @@ typedef NS_ENUM(int, Operation) {
         if (cards.count == 0) {
             return;
         }
-        // 出的牌升序排列
+        // 出的牌降序排列
         [cards sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             Card *card1 = obj1;
             Card *card2 = obj2;
             NSNumber *number1 = [NSNumber numberWithInt:card1.index];
             NSNumber *number2 = [NSNumber numberWithInt:card2.index];
             
-            NSComparisonResult result = [number1 compare:number2];
-            return result == NSOrderedDescending;  // 降序
+            return [number2 compare:number1];
         }];
         // 牌型检查
         BOOL isIllegal = [GamerChecker checkCards:_gameView.myCardsView.choosedCards];
@@ -195,17 +194,15 @@ typedef NS_ENUM(int, Operation) {
         // 显示出牌按钮或者“思考中”
         if (_currentGamer == _me) {
             [_me.cards.cardList addObjectsFromArray:bottomCards];
-            NSArray *cardsAry = [_me.cards.cardList sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            [_me.cards.cardList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
                 Card *card1 = obj1;
                 Card *card2 = obj2;
                 NSNumber *number1 = [NSNumber numberWithInt:card1.index];
                 NSNumber *number2 = [NSNumber numberWithInt:card2.index];
                 
-                NSComparisonResult result = [number1 compare:number2];
-                return result == NSOrderedAscending;  // 降序
+                return [number2 compare:number1];
+
             }];
-            
-            _me.cards.cardList = [NSMutableArray arrayWithArray:cardsAry];
             [_gameView.myCardsView setCards:_me.cards clickable:YES];
             [_gameView.playBtn setTitle:@"出牌" forState:UIControlStateNormal];
             
@@ -353,17 +350,15 @@ typedef NS_ENUM(int, Operation) {
         [cardList addObject:card];
     }
     
-    NSArray *cardsAry = [cardList sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+    [cardList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         Card *card1 = obj1;
         Card *card2 = obj2;
         NSNumber *number1 = [NSNumber numberWithInt:card1.index];
         NSNumber *number2 = [NSNumber numberWithInt:card2.index];
         
-        NSComparisonResult result = [number1 compare:number2];
-        return result == NSOrderedAscending;  // 降序
+        return [number2 compare:number1];
     }];
-    
-    _me.cards.cardList = [NSMutableArray arrayWithArray:cardsAry];
+    _me.cards.cardList = cardList;
     [_gameView.myCardsView setCards:_me.cards clickable:YES];
 }
 
