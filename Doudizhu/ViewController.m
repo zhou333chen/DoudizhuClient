@@ -287,7 +287,10 @@ typedef NS_ENUM(int, Operation) {
 }
 
 - (void)getPassLandlordWithString:(NSString *)str {
-    
+    NSArray *strs = [str componentsSeparatedByString:@"|"];
+    if (strs.count == 2) {
+        [self setLandlord:strs[1]];
+    }
 }
 
 - (void)getIllegalWithString:(NSString *)str {
@@ -320,23 +323,7 @@ typedef NS_ENUM(int, Operation) {
         _nextGamer = nextGamer;
         
         NSString *currentId = ids[3];
-        for (int i=0; i<3; i++) {
-            Gamer *gamer = _gamers[i];
-            if ([gamer.user.userId isEqualToString:currentId]) {
-                _currentGamer = gamer;
-                _currentGamerIndex = i;
-                break;
-            }
-        }
-        
-        if (_currentGamer == _me) {
-            _gameView.playBtn.hidden = NO;
-            _gameView.passBtn.hidden = NO;
-            [_gameView.playBtn setTitle:@"叫地主" forState:UIControlStateNormal];
-        } else {
-            UIView *view = _gameView.waitImgs[[_gamers indexOfObject:_currentGamer]];
-            view.hidden = NO;
-        }
+        [self setLandlord:currentId];
     }
 }
 
@@ -360,6 +347,34 @@ typedef NS_ENUM(int, Operation) {
     }];
     _me.cards.cardList = cardList;
     [_gameView.myCardsView setCards:_me.cards clickable:YES];
+}
+
+- (void)setLandlord:(NSString *)userId {
+    for (int i=0; i<3; i++) {
+        Gamer *gamer = _gamers[i];
+        if ([gamer.user.userId isEqualToString:userId]) {
+            _currentGamer = gamer;
+            _currentGamerIndex = i;
+            break;
+        }
+    }
+    
+    _gameView.playBtn.hidden = YES;
+    _gameView.passBtn.hidden = YES;
+    for (UIView *view in _gameView.waitImgs) {
+        if ([view respondsToSelector:@selector(setHidden:)]) {
+            view.hidden = YES;
+        }
+    }
+
+    if (_currentGamer == _me) {
+        _gameView.playBtn.hidden = NO;
+        _gameView.passBtn.hidden = NO;
+        [_gameView.playBtn setTitle:@"叫地主" forState:UIControlStateNormal];
+    } else {
+        UIView *view = _gameView.waitImgs[[_gamers indexOfObject:_currentGamer]];
+        view.hidden = NO;
+    }
 }
 
 @end

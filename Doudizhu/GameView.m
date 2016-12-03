@@ -91,7 +91,7 @@
 
 - (void)reset {
     for (CardsView *cardView in _playCardViews) {
-        if ([cardView respondsToSelector:@selector(setCards:)]) {
+        if ([cardView respondsToSelector:@selector(setCards:clickable:)]) {
             [cardView setCards:nil clickable:NO];
         }
     }
