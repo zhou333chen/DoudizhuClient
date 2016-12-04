@@ -14,6 +14,7 @@
     if ([self checkKingBomb:cards] ||
         [self checkNormalBomb:cards] ||
         [self checkStraight:cards] ||
+        [self checkCompany:cards] ||
         [self checkPlane:cards] ||
         [self checkFour:cards] ||
         [self checkThree:cards] ||
@@ -100,9 +101,9 @@
 
 + (BOOL)checkCompany:(Cards *)cards {
     if (cards.count >= 6 && cards.count % 2 == 0) {
-        for (int i=0; i<cards.count; i=i+2) {
+        for (int i=0; i<cards.count-1; i=i+2) {
             if ([cards.cardList[i] number] != [cards.cardList[i+1] number] ||
-                (i < cards.count - 2 && [cards.cardList[i] number] != [cards.cardList[i+2] number] - 1)) {
+                (i < cards.count - 3 && [cards.cardList[i] number] != [cards.cardList[i+2] number] + 1)) {
                 return NO;
             }
         }
@@ -117,7 +118,9 @@
         int planeCount = 0;
         int firstIndex = -1;
         for (int i = 0; i<cards.count - planeCount * 2; i++) {
-            if ([cards.cardList[i] number] == [cards.cardList[i+1] number] &&
+            if (i+1 < cards.count &&
+                i+2 < cards.count &&
+                [cards.cardList[i] number] == [cards.cardList[i+1] number] &&
                 [cards.cardList[i] number] == [cards.cardList[i+2] number]) {
                 if (firstIndex == -1) {
                     firstIndex = i;
@@ -264,7 +267,7 @@
         return;
     }
     
-    if (from > cards.count - 1 || to > cards.count - 1) {
+    if (from > cards.count - 1 || to > cards.count) {
         return;
     }
     

@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong) User *user;
 @property (nonatomic, strong) Cards *cards;
-@property (nonatomic, assign) int cardsCount;
+@property (nonatomic, assign) int leftCount;
 @property (nonatomic, assign) BOOL isLandlord;
 
 @end

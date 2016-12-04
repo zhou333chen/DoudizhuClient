@@ -67,9 +67,17 @@
 }
 
 - (void)setLandlord:(Landlord)landlord {
-    UIImageView *landlordImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_landlord"]];
-    landlordImg.width = 30;
-    landlordImg.height = 30;
+    UIImageView *landlordImg;
+    if (_landlordImg == nil) {
+        landlordImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_landlord"]];
+        landlordImg.width = 30;
+        landlordImg.height = 30;
+        [self addSubview:landlordImg];
+        _landlordImg = landlordImg;
+    } else {
+        landlordImg = _landlordImg;
+    }
+    _landlordImg.hidden = NO;
     switch (landlord) {
         case LandlordMe:
             landlordImg.x = 40;
@@ -86,10 +94,11 @@
         default:
             break;
     }
-    [self addSubview:landlordImg];
 }
 
 - (void)reset {
+    _landlordImg.hidden = YES;
+    
     for (CardsView *cardView in _playCardViews) {
         if ([cardView respondsToSelector:@selector(setCards:clickable:)]) {
             [cardView setCards:nil clickable:NO];

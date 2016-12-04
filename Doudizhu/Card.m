@@ -24,18 +24,4 @@
     }
 }
 
-- (BOOL)isEqual:(id)object {
-    if (object == self)
-        return YES;
-    if (object && [object isKindOfClass:[self class]]) {
-        Card *card = (Card *)object;
-        if (card.index == _index) {
-            return YES;
-        } else {
-            return NO;
-        }
-    }
-    return NO;
-}
-
 @end

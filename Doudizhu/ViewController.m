@@ -37,6 +37,7 @@ typedef NS_ENUM(int, Operation) {
 @property (nonatomic, strong) SocketManager *socketManager;
 @property (nonatomic, strong) GameView *gameView;
 @property (nonatomic, assign) BOOL hasBegin;    // 是否已经叫完地主开始游戏了
+@property (nonatomic, strong) NSArray *playCards;    // 当前轮次每个人出的牌
 
 @end
 
@@ -47,12 +48,14 @@ typedef NS_ENUM(int, Operation) {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor colorWithHexString:@"#0d4d21"];
+    _playCards = [NSArray arrayWithObjects:[[Cards alloc] init], [[Cards alloc] init], [[Cards alloc] init], nil];
     
     Gamer *me = [[Gamer alloc] init];
     me.user = [[User alloc] init];
+    me.leftCount = 17;
     _me = me;
     
-    me.user.userId = @"1";
+    me.user.userId = [NSString stringWithFormat:@"%d", arc4random() % 100];
     _gamers = [NSMutableArray array];
     [_gamers addObject:me];
     
@@ -122,8 +125,6 @@ typedef NS_ENUM(int, Operation) {
 }
 
 - (void)restart {
-    _hasBegin = NO;
-    [_gameView reset];
     [_socketManager writeString:[NSString stringWithFormat:@"%d|%@", OperationLogin, _me.user.userId]];
 }
 
@@ -167,6 +168,13 @@ typedef NS_ENUM(int, Operation) {
 
 #pragma mark - analyse
 - (void)getDealWithString:(NSString *)str {
+    _hasBegin = NO;
+    [_gameView reset];
+    [_gamers removeObject:_lastGamer];
+    [_gamers removeObject:_nextGamer];
+    _lastGamer = nil;
+    _nextGamer = nil;
+    
     NSArray *strs = [str componentsSeparatedByString:@"|"];
     if (strs.count > 1) {
         [self getIds:strs[1]];
@@ -179,6 +187,8 @@ typedef NS_ENUM(int, Operation) {
 - (void)getBottomWithString:(NSString *)str {
     NSArray *strs = [str componentsSeparatedByString:@"|"];
     if (strs.count == 3 && [strs[1] isEqualToString:_currentGamer.user.userId]) {
+        _currentGamer.isLandlord = YES;
+        _currentGamer.leftCount += 3;
         // 显示底牌
         NSMutableArray *bottomCards = [NSMutableArray array];
         NSArray *cardStr = [strs[2] componentsSeparatedByString:@"&"];
@@ -204,13 +214,10 @@ typedef NS_ENUM(int, Operation) {
 
             }];
             [_gameView.myCardsView setCards:_me.cards clickable:YES];
-            [_gameView.playBtn setTitle:@"出牌" forState:UIControlStateNormal];
-            
             [_gameView setLandlord:LandlordMe];
         } else {
-            _currentGamer.cardsCount += 3;
             UILabel *countLabel = _gameView.countLabels[_currentGamerIndex];
-            countLabel.text = [NSString stringWithFormat:@"%d", _currentGamer.cardsCount];
+            countLabel.text = [NSString stringWithFormat:@"%d", _currentGamer.leftCount];
             
             int index = (int)[_gamers indexOfObject:_me];
             if ((index + 1) % 3 == _currentGamerIndex) {
@@ -219,6 +226,7 @@ typedef NS_ENUM(int, Operation) {
                 [_gameView setLandlord:LandlordLast];
             }
         }
+        [_gameView.playBtn setTitle:@"出牌" forState:UIControlStateNormal];
     }
 }
 
@@ -243,9 +251,20 @@ typedef NS_ENUM(int, Operation) {
                 passLabel.hidden = NO;
             }
         }
+        Cards *currentPlayCards = _playCards[_currentGamerIndex];
+        currentPlayCards.cardList = playCards;
+        _currentGamer.leftCount -= (int)playCards.count;
         // 如果我刚出完牌，则隐藏按钮
         if (_currentGamer == _me) {
-            [_me.cards.cardList removeObjectsInArray:playCards];
+            NSMutableArray *tmp = [NSMutableArray array];
+            for (Card *card1 in _me.cards.cardList) {
+                for (Card *card2 in playCards) {
+                    if (card1.index == card2.index) {
+                        [tmp addObject:card1];
+                    }
+                }
+            }
+            [_me.cards.cardList removeObjectsInArray:tmp];
             [_gameView.myCardsView setCards:_me.cards clickable:YES];
             _gameView.passBtn.hidden = YES;
             _gameView.playBtn.hidden = YES;
@@ -259,14 +278,33 @@ typedef NS_ENUM(int, Operation) {
         CardsView *cardsView = _gameView.playCardViews[_currentGamerIndex];
         [cardsView setCards:cards clickable:NO];
         // 显示剩余牌数
-        _currentGamer.cardsCount -= (int)playCards.count;
         UILabel *countLabel = _gameView.countLabels[_currentGamerIndex];
         if ([countLabel isKindOfClass:[UILabel class]]) {
-            countLabel.text = [NSString stringWithFormat:@"%d", _currentGamer.cardsCount];
+            countLabel.text = [NSString stringWithFormat:@"%d", _currentGamer.leftCount];
+        }
+        // 游戏结束
+        if (_currentGamer.leftCount == 0) {
+            if (_currentGamer == _me || _currentGamer.isLandlord == _me.isLandlord) {
+                [SVProgressHUD showInfoWithStatus:@"你赢了"];
+                NSLog(@"WIN");
+            } else {
+                [SVProgressHUD showInfoWithStatus:@"你输了"];
+            }
         }
         
         _currentGamerIndex = (_currentGamerIndex + 1) % 3;
         _currentGamer = _gamers[_currentGamerIndex];
+        
+        // 如果其他人都要不起下家的牌，则清空牌面
+        if ([_playCards[_currentGamerIndex] cardList].count > 0 &&
+            [_playCards[(_currentGamerIndex + 1) % 3] cardList].count == 0 &&
+            [_playCards[(_currentGamerIndex + 2) % 3] cardList].count == 0) {
+            for (UIView *view in _gameView.passLabels) {
+                if ([view respondsToSelector:@selector(setHidden:)]) {
+                    view.hidden = YES;
+                }
+            }
+        }
         // 如果下一个是我出牌，则显示按钮
         if (_currentGamer == _me) {
             _gameView.passBtn.hidden = NO;
@@ -305,20 +343,20 @@ typedef NS_ENUM(int, Operation) {
     
     if (ids.count == 4) {
         Gamer *lastGamer = [[Gamer alloc] init];
+        lastGamer.leftCount = 17;
         lastGamer.user = [[User alloc] init];
         lastGamer.user.userId = ids[1];
-        lastGamer.cardsCount = 17;
         UILabel *label = _gameView.countLabels[1];
-        label.text = [NSString stringWithFormat:@"%d", lastGamer.cardsCount];
+        label.text = [NSString stringWithFormat:@"%d", lastGamer.leftCount];
         [_gamers addObject:lastGamer];
         _lastGamer = lastGamer;
         
         Gamer *nextGamer = [[Gamer alloc] init];
+        nextGamer.leftCount = 17;
         nextGamer.user = [[User alloc] init];
         nextGamer.user.userId = ids[2];
-        nextGamer.cardsCount = 17;
         label = _gameView.countLabels[2];
-        label.text = [NSString stringWithFormat:@"%d", lastGamer.cardsCount];
+        label.text = [NSString stringWithFormat:@"%d", lastGamer.leftCount];
         [_gamers addObject:nextGamer];
         _nextGamer = nextGamer;
         
