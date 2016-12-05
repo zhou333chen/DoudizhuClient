@@ -256,15 +256,7 @@ typedef NS_ENUM(int, Operation) {
         _currentGamer.leftCount -= (int)playCards.count;
         // 如果我刚出完牌，则隐藏按钮
         if (_currentGamer == _me) {
-            NSMutableArray *tmp = [NSMutableArray array];
-            for (Card *card1 in _me.cards.cardList) {
-                for (Card *card2 in playCards) {
-                    if (card1.index == card2.index) {
-                        [tmp addObject:card1];
-                    }
-                }
-            }
-            [_me.cards.cardList removeObjectsInArray:tmp];
+            [_me.cards.cardList removeObjectsInArray:playCards];
             [_gameView.myCardsView setCards:_me.cards clickable:YES];
             _gameView.passBtn.hidden = YES;
             _gameView.playBtn.hidden = YES;
@@ -290,6 +282,9 @@ typedef NS_ENUM(int, Operation) {
             } else {
                 [SVProgressHUD showInfoWithStatus:@"你输了"];
             }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self restart];
+            });
         }
         
         _currentGamerIndex = (_currentGamerIndex + 1) % 3;

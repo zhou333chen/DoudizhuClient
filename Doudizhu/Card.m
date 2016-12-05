@@ -24,4 +24,20 @@
     }
 }
 
+- (BOOL)isEqual:(id)object {
+    if (object == self) {
+        return YES;
+    }
+    Card *card = (Card *)object;
+    if (_index == card.index) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (NSUInteger)hash {
+    return 5000 + _index;
+}
+
 @end
