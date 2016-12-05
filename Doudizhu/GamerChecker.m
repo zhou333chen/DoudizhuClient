@@ -64,8 +64,8 @@
 
 + (BOOL)checkKingBomb:(Cards *)cards {
     if (cards.count == 2 &&
-        [cards.cardList[0] index] == 53 &&
-        [cards.cardList[1] index] == 54) {
+        [cards.cardList[0] index] == 54 &&
+        [cards.cardList[1] index] == 53) {
         cards.type = TypeKingBomb;
         return YES;
     } else {
