@@ -52,7 +52,6 @@ typedef NS_ENUM(int, Operation) {
     
     Gamer *me = [[Gamer alloc] init];
     me.user = [[User alloc] init];
-    me.leftCount = 17;
     _me = me;
     
     me.user.userId = [NSString stringWithFormat:@"%d", arc4random() % 100];
@@ -278,7 +277,7 @@ typedef NS_ENUM(int, Operation) {
         if (_currentGamer.leftCount == 0) {
             if (_currentGamer == _me || _currentGamer.isLandlord == _me.isLandlord) {
                 [SVProgressHUD showInfoWithStatus:@"你赢了"];
-                NSLog(@"WIN");
+                NSLog(@"win");
             } else {
                 [SVProgressHUD showInfoWithStatus:@"你输了"];
             }
@@ -337,6 +336,8 @@ typedef NS_ENUM(int, Operation) {
     NSArray *ids = [str componentsSeparatedByString:@"&"];
     
     if (ids.count == 4) {
+        _me.leftCount = 17;
+        
         Gamer *lastGamer = [[Gamer alloc] init];
         lastGamer.leftCount = 17;
         lastGamer.user = [[User alloc] init];
